@@ -14,13 +14,17 @@ namespace Agents
         List<Agent> agentsPool = new();
         List<Agent> currentlyUsedAgents = new();
 
-        public event UnityAction OnAgentSpawned = delegate {};
-        public event UnityAction OnAgentDisabled = delegate {};
+        public event UnityAction<int> OnAgentAmountChanged = delegate {};
         public event UnityAction OnTickRateSet = delegate {};
 
         void Awake()
         {
             CreateInitialPool();
+        }
+
+        void RefreshAgentsAmount()
+        {
+            OnAgentAmountChanged.Invoke(currentlyUsedAgents.Count);
         }
 
 
@@ -31,10 +35,10 @@ namespace Agents
             Agent agent = GetAgentFromPool();
             agent.gameObject.SetActive(true);
             currentlyUsedAgents.Add(agent);
-            OnAgentSpawned.Invoke();
+            
         }
 
-        void IAgentService.RequestAgentDisable()
+        void IAgentService.RequestRandomAgentDisabled()
         {
             if (currentlyUsedAgents.Count == 0) return;
             
@@ -42,7 +46,11 @@ namespace Agents
             Agent agentToDisable = currentlyUsedAgents[i];
             agentToDisable.gameObject.SetActive(false);
             currentlyUsedAgents.Remove(agentToDisable);
-            OnAgentDisabled.Invoke();
+        }
+
+        void IAgentService.RequestAllAgentsDisabled()
+        {
+            
         }
 
         #endregion

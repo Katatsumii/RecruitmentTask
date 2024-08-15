@@ -4,9 +4,9 @@ namespace Core
 {
     public interface IAgentService
     {
-        event UnityAction OnAgentSpawned;
-        event UnityAction OnAgentDisabled;
+        event UnityAction<int> OnAgentAmountChanged;
         void RequestAgentSpawn();
-        void RequestAgentDisable();
+        void RequestRandomAgentDisabled();
+        void RequestAllAgentsDisabled();
     }
 }
