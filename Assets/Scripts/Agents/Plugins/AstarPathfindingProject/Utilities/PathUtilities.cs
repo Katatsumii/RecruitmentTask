@@ -28,7 +28,9 @@ namespace Pathfinding {
 		/// See: graph-updates (view in online documentation for working links)
 		/// See: <see cref="AstarPath.GetNearest"/>
 		/// </summary>
-		public static bool IsPathPossible (GraphNode node1, GraphNode node2) {
+		public static bool IsPathPossible (GraphNode node1, GraphNode node2)
+		{
+			if (node1 is null || node2 is null) return false;
 			return node1.Walkable && node2.Walkable && node1.Area == node2.Area;
 		}
 

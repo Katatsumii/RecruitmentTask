@@ -2,6 +2,7 @@ using Pathfinding;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System;
+using DG.Tweening;
 using UnityEngine.Events;
 
 namespace Agents
@@ -50,7 +51,9 @@ namespace Agents
                 ai.SearchPath();
             }
             else
-                NewPath();
+            {
+                DOVirtual.DelayedCall(0.1f, () => NewPath());
+            }
         }
 
         bool IsDestinationCorrect(Vector3 destination)

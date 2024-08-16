@@ -35,6 +35,14 @@ namespace Agents
             iTickService.OnTickRateSet += SetTickRate;
         }
 
+        [ContextMenu("Spawn 500")]
+        public void Spawn500()
+        {
+            for (int i = 0; i < 500; i++)
+            {
+                RequestAgentSpawn();
+            }
+        }
         void OnDestroy()
         {
             iTickService.OnTickRateSet -= SetTickRate;
@@ -61,10 +69,11 @@ namespace Agents
 
         #region IAgentService
 
-        void IAgentService.RequestAgentSpawn()
+        public void RequestAgentSpawn()
         {
             var agent = GetAgentFromPool();
             agent.gameObject.SetActive(true);
+            agent.transform.position = Vector3.zero;
             agent.AgentDissolve.MaterializeAgent(() => AgentMaterialized(agent));
         }
 
