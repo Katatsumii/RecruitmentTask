@@ -38,6 +38,10 @@ namespace Agents
         void OnDestroy()
         {
             iTickService.OnTickRateSet -= SetTickRate;
+            foreach (var agent in currentlyUsedAgents)
+            {
+                agent.OnAgentPathCompleted -= AgentPathCompleted;
+            }
         }
 
         void RefreshAgentsAmount()
@@ -62,6 +66,7 @@ namespace Agents
             var agent = GetAgentFromPool();
             agent.gameObject.SetActive(true);
             agent.InitAgent();
+            agent.OnAgentPathCompleted += AgentPathCompleted;
             currentlyUsedAgents.Add(agent);
             RefreshAgentsAmount();
 
@@ -75,6 +80,7 @@ namespace Agents
             
             var agentToDisable = currentlyUsedAgents[i];
             agentToDisable.gameObject.SetActive(false);
+            agentToDisable.OnAgentPathCompleted -= AgentPathCompleted;
             currentlyUsedAgents.Remove(agentToDisable);
             
             RefreshAgentsAmount();
@@ -85,6 +91,7 @@ namespace Agents
             for (int i = currentlyUsedAgents.Count - 1; i >= 0; i--)
             {
                 currentlyUsedAgents[i].gameObject.SetActive(false);
+                currentlyUsedAgents[i].OnAgentPathCompleted -= AgentPathCompleted;
                 currentlyUsedAgents.RemoveAt(i);
             }
             
@@ -115,6 +122,11 @@ namespace Agents
                 var createdAgent = Instantiate(poolPrefab, transform);
                 agentsPool.Add(createdAgent);
             }
+        }
+
+        void AgentPathCompleted(string agentID)
+        {
+            OnAgentReachedDestination.Invoke(agentID);
         }
 
         #endregion

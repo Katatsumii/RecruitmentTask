@@ -2,6 +2,7 @@ using Pathfinding;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System;
+using UnityEngine.Events;
 
 namespace Agents
 {
@@ -13,16 +14,32 @@ namespace Agents
         
 
         IAstarAI ai;
+
+        public event UnityAction<string> OnAgentPathCompleted = delegate {};
+
+        void Awake()
+        {
+            ai = GetComponent<IAstarAI>();
+        }
+        
         public void InitAgent()
         {
             //materialize 
             SetAgentGuid();
             NewPath();
+
+            aiPath.OnTargetReachedDestination += AgentReachedDestination;
         }
 
-        void Awake()
+        void OnDestroy()
         {
-            ai = GetComponent<IAstarAI>();
+            aiPath.OnTargetReachedDestination -= AgentReachedDestination;
+        }
+
+        void AgentReachedDestination()
+        {
+            OnAgentPathCompleted.Invoke(id);
+            NewPath();
         }
 
         void NewPath()
