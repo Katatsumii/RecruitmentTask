@@ -1,4 +1,3 @@
-using System;
 using Core;
 using UnityEngine;
 using TMPro;
@@ -7,10 +6,10 @@ namespace UI
 {
     public class AgentsAmountLabel : MonoBehaviour
     {
-        [Header("UI")]
-        [SerializeField] TextMeshProUGUI agentsLabel;
+        [Header("UI")] [SerializeField] TextMeshProUGUI agentsLabel;
 
         IAgentService iAgentService;
+
         void Start()
         {
             iAgentService = ServiceLocator.GetService<IAgentService>();
@@ -26,6 +25,5 @@ namespace UI
         {
             agentsLabel.text = agentsCount.ToString();
         }
-
     }
 }

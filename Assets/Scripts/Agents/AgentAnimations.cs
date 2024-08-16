@@ -8,12 +8,12 @@ namespace Agents
 
         readonly int speedID = Animator.StringToHash("Speed");
         readonly int motionSpeed = Animator.StringToHash("MotionSpeed");
-    
+
         float minAnimationSpeed = 1.5f;
         float maxAnimationSpeed = 3f;
         float minSpeed = 1;
         float maxSpeed = 10;
-    
+
 
         public void SetSpeed(float speed)
         {
@@ -21,10 +21,11 @@ namespace Agents
             animator.SetFloat(speedID, animationSpeed);
             animator.SetFloat(motionSpeed, animationSpeed);
         }
-    
+
         float GetMappedValue(float currentSpeed)
         {
-            return minAnimationSpeed + (currentSpeed - minSpeed) * (maxAnimationSpeed - minAnimationSpeed) / (maxSpeed - minSpeed);
+            return minAnimationSpeed + (currentSpeed - minSpeed) * (maxAnimationSpeed - minAnimationSpeed) /
+                (maxSpeed - minSpeed);
         }
     }
 }

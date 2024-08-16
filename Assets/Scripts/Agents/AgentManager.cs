@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Core;
 using UnityEngine;
@@ -9,19 +8,20 @@ namespace Agents
 {
     public class AgentManager : MonoBehaviour, IAgentService
     {
-        [Header("Object pooling")]
-        [SerializeField] int poolStartSize;
+        [Header("Object pooling")] [SerializeField]
+        int poolStartSize;
+
         [SerializeField] Agent poolPrefab;
         List<Agent> agentsPool = new();
         List<Agent> currentlyUsedAgents = new();
 
-        public event UnityAction<int> OnAgentAmountChanged = delegate {};
+        public event UnityAction<int> OnAgentAmountChanged = delegate { };
         public event UnityAction<string> OnAgentReachedDestination = delegate { };
-        
+
 
         ITickService iTickService;
         int currentTickrate = 1;
-        
+
 
         void Awake()
         {
@@ -35,14 +35,7 @@ namespace Agents
             iTickService.OnTickRateSet += SetTickRate;
         }
 
-        [ContextMenu("Spawn 500")]
-        public void Spawn500()
-        {
-            for (int i = 0; i < 500; i++)
-            {
-                RequestAgentSpawn();
-            }
-        }
+
         void OnDestroy()
         {
             iTickService.OnTickRateSet -= SetTickRate;
@@ -69,7 +62,7 @@ namespace Agents
 
         #region IAgentService
 
-        public void RequestAgentSpawn()
+        void IAgentService.RequestAgentSpawn()
         {
             var agent = GetAgentFromPool();
             agent.gameObject.SetActive(true);
@@ -80,9 +73,9 @@ namespace Agents
         void IAgentService.RequestRandomAgentDisabled()
         {
             if (currentlyUsedAgents.Count == 0) return;
-            
+
             int i = Random.Range(0, currentlyUsedAgents.Count - 1);
-            
+
             var agentToDisable = currentlyUsedAgents[i];
             agentToDisable.SetTickRateForAgent(0);
             currentlyUsedAgents.Remove(agentToDisable);
@@ -98,7 +91,7 @@ namespace Agents
                 currentlyUsedAgents.Remove(agentToDisable);
                 agentToDisable.AgentDissolve.DissolveAgent(() => AgentDissolved(agentToDisable));
             }
-            
+
             RefreshAgentsAmount();
         }
 

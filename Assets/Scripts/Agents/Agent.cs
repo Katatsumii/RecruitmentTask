@@ -17,13 +17,13 @@ namespace Agents
         string id;
         IAstarAI ai;
 
-        public event UnityAction<string> OnAgentPathCompleted = delegate {};
+        public event UnityAction<string> OnAgentPathCompleted = delegate { };
 
         void Awake()
         {
             ai = GetComponent<IAstarAI>();
         }
-        
+
         public void InitAgent()
         {
             SetAgentGuid();

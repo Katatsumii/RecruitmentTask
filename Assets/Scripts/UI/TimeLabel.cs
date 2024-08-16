@@ -1,4 +1,3 @@
-using System;
 using Core;
 using TMPro;
 using UnityEngine;
@@ -10,6 +9,7 @@ namespace UI
         [SerializeField] TextMeshProUGUI label;
 
         ITickService iTickService;
+
         void Start()
         {
             iTickService = ServiceLocator.GetService<ITickService>();
@@ -23,7 +23,7 @@ namespace UI
 
         void UpdateTimeLabel(int tickRate)
         {
-            label.text = tickRate.ToString();
+            label.text = tickRate + "x";
         }
     }
 }

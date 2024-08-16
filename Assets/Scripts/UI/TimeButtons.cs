@@ -1,4 +1,3 @@
-using System;
 using Core;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,21 +7,19 @@ namespace UI
 {
     public class TimeButtons : MonoBehaviour, ITickService
     {
-        [Header("Values")]
-        [SerializeField] int minTickrate;
+        [Header("Values")] [SerializeField] int minTickrate;
         [SerializeField] int maxTickrate;
 
-        [Header("UI")]
-        [SerializeField] Button addTickRateButton;
+        [Header("UI")] [SerializeField] Button addTickRateButton;
         [SerializeField] Button lowerTickRateButton;
         [SerializeField] Image pauseButtonIcon;
         [SerializeField] Sprite pauseSprite;
         [SerializeField] Sprite playSprite;
-        
+
         int currentTickRate = 1;
         bool paused = false;
-        
-        public event UnityAction<int> OnTickRateSet = delegate {};
+
+        public event UnityAction<int> OnTickRateSet = delegate { };
 
         void Awake()
         {
@@ -42,20 +39,20 @@ namespace UI
                 currentTickRate = maxTickrate;
                 return;
             }
-            
+
             SetTickRate(currentTickRate);
         }
 
         public void LowerTickrateButton()
         {
             currentTickRate--;
-            
+
             if (currentTickRate < minTickrate)
             {
                 currentTickRate = minTickrate;
                 return;
             }
-            
+
             SetTickRate(currentTickRate);
         }
 
@@ -67,8 +64,6 @@ namespace UI
                 addTickRateButton.interactable = false;
                 lowerTickRateButton.interactable = false;
                 pauseButtonIcon.sprite = playSprite;
-
-
             }
             else
             {
@@ -77,6 +72,7 @@ namespace UI
                 lowerTickRateButton.interactable = true;
                 pauseButtonIcon.sprite = pauseSprite;
             }
+
             paused = !paused;
         }
     }

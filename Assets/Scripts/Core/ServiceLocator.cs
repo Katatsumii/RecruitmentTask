@@ -1,10 +1,9 @@
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 
 namespace Core
 {
-    public class ServiceLocator : MonoBehaviour
+    public static class ServiceLocator
     {
         static Dictionary<Type, object> services = new();
 
@@ -17,12 +16,11 @@ namespace Core
         public static T GetService<T>()
         {
             var type = typeof(T);
-            
+
             if (services.TryGetValue(type, out var service))
                 return (T)service;
-            
+
             throw new Exception($"Service {type} not found");
         }
-        
     }
 }
