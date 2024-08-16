@@ -4,7 +4,7 @@ namespace Core
 {
     public interface ITickService
     {
-        event UnityAction OnTickRateSet;
-        void SetTickRate();
+        event UnityAction<int> OnTickRateSet;
+        void SetTickRate(int tickRate);
     }
 }

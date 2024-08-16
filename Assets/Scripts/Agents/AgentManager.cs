@@ -1,30 +1,53 @@
+using System;
 using System.Collections.Generic;
 using Core;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 namespace Agents
 {
-    public class AgentManager : MonoBehaviour, IAgentService, ITickService
+    public class AgentManager : MonoBehaviour, IAgentService
     {
-        [Header("Object pooling")] [SerializeField]
-        int poolStartSize;
-
+        [Header("Object pooling")]
+        [SerializeField] int poolStartSize;
         [SerializeField] Agent poolPrefab;
         List<Agent> agentsPool = new();
         List<Agent> currentlyUsedAgents = new();
 
         public event UnityAction<int> OnAgentAmountChanged = delegate {};
-        public event UnityAction OnTickRateSet = delegate {};
+        public event UnityAction<string> OnAgentReachedDestination = delegate { };
+        
+
+        ITickService iTickService;
+        int currentTickrate;
+        
 
         void Awake()
         {
+            ServiceLocator.RegisterService<IAgentService>(this);
             CreateInitialPool();
+        }
+
+        void Start()
+        {
+            iTickService = ServiceLocator.GetService<ITickService>();
+            iTickService.OnTickRateSet += SetTickRate;
         }
 
         void RefreshAgentsAmount()
         {
             OnAgentAmountChanged.Invoke(currentlyUsedAgents.Count);
+            iTickService.OnTickRateSet -= SetTickRate;
+        }
+
+        void SetTickRate(int tickRate)
+        {
+            currentTickrate = tickRate;
+            foreach (var agent in currentlyUsedAgents)
+            {
+                agent.SetTickRateForAgent(currentTickrate);
+            }
         }
 
 
@@ -35,7 +58,8 @@ namespace Agents
             Agent agent = GetAgentFromPool();
             agent.gameObject.SetActive(true);
             currentlyUsedAgents.Add(agent);
-            
+            RefreshAgentsAmount();
+
         }
 
         void IAgentService.RequestRandomAgentDisabled()
@@ -46,20 +70,18 @@ namespace Agents
             Agent agentToDisable = currentlyUsedAgents[i];
             agentToDisable.gameObject.SetActive(false);
             currentlyUsedAgents.Remove(agentToDisable);
+            RefreshAgentsAmount();
         }
 
         void IAgentService.RequestAllAgentsDisabled()
         {
+            for (int i = currentlyUsedAgents.Count - 1; i >= 0; i--)
+            {
+                currentlyUsedAgents[i].gameObject.SetActive(false);
+                currentlyUsedAgents.RemoveAt(i);
+            }
             
-        }
-
-        #endregion
-
-        #region ITickService
-
-        void ITickService.SetTickRate()
-        {
-            
+            RefreshAgentsAmount();
         }
 
         #endregion
