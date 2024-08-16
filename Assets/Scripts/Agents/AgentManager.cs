@@ -35,10 +35,14 @@ namespace Agents
             iTickService.OnTickRateSet += SetTickRate;
         }
 
+        void OnDestroy()
+        {
+            iTickService.OnTickRateSet -= SetTickRate;
+        }
+
         void RefreshAgentsAmount()
         {
             OnAgentAmountChanged.Invoke(currentlyUsedAgents.Count);
-            iTickService.OnTickRateSet -= SetTickRate;
         }
 
         void SetTickRate(int tickRate)
@@ -57,6 +61,7 @@ namespace Agents
         {
             Agent agent = GetAgentFromPool();
             agent.gameObject.SetActive(true);
+            agent.InitAgent();
             currentlyUsedAgents.Add(agent);
             RefreshAgentsAmount();
 
