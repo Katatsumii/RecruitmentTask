@@ -120,6 +120,7 @@ namespace Agents
             for (int i = 0; i < poolStartSize; i++)
             {
                 var createdAgent = Instantiate(poolPrefab, transform);
+                createdAgent.gameObject.SetActive(false);
                 agentsPool.Add(createdAgent);
             }
         }

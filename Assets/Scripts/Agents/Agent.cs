@@ -9,6 +9,7 @@ namespace Agents
     public class Agent : MonoBehaviour
     {
         [SerializeField] AIPath aiPath;
+        [SerializeField] AgentAnimations agentAnimations;
 
         string id;
         
@@ -78,6 +79,7 @@ namespace Agents
         public void SetTickRateForAgent(int tickRate)
         {
             ai.maxSpeed = tickRate;
+            agentAnimations.SetSpeed(tickRate);
         }
     }
 }

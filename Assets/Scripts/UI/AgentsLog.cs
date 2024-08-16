@@ -13,8 +13,6 @@ namespace UI
         [SerializeField] AgentsLogText logTextPrefab;
         List<AgentsLogText> logTextPool = new();
 
-        
-
         [Header("Text fade values")]
         [SerializeField] float fadeDelay;
         [SerializeField] float fadeTime;

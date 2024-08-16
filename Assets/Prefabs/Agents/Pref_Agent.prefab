@@ -3781,6 +3781,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5374739917721980813}
   - component: {fileID: 82120044627468423}
+  - component: {fileID: 3173193123272521634}
   - component: {fileID: 4833515995845945174}
   - component: {fileID: 6642612241717592096}
   - component: {fileID: 580732885757182426}
@@ -3823,6 +3824,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiPath: {fileID: 4833515995845945174}
+  agentAnimations: {fileID: 3173193123272521634}
+--- !u!114 &3173193123272521634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8104752608372510995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7ef2a40c659ce4aadca4edf5cd62a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 580732885757182426}
 --- !u!114 &4833515995845945174
 MonoBehaviour:
   m_ObjectHideFlags: 0
