@@ -16,7 +16,7 @@ namespace Agents
         public void InitAgent()
         {
             //materialize 
-            SetAgentGUID();
+            SetAgentGuid();
             NewPath();
         }
 
@@ -53,7 +53,7 @@ namespace Agents
             return (Vector3)randomNode.position;
         }
 
-        void SetAgentGUID()
+        void SetAgentGuid()
         {
             id = Guid.NewGuid().ToString();
         }

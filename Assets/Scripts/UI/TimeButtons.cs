@@ -11,7 +11,15 @@ namespace UI
         [Header("Values")]
         [SerializeField] int minTickrate;
         [SerializeField] int maxTickrate;
-        int currentTickRate;
+
+        [Header("UI")]
+        [SerializeField] Button addTickRateButton;
+        [SerializeField] Button lowerTickRateButton;
+        [SerializeField] Image pauseButtonIcon;
+        [SerializeField] Sprite pauseSprite;
+        [SerializeField] Sprite playSprite;
+        
+        int currentTickRate = 1;
         bool paused = false;
         
         public event UnityAction<int> OnTickRateSet = delegate {};
@@ -29,22 +37,46 @@ namespace UI
         public void HigherTickrateButton()
         {
             currentTickRate++;
+            if (currentTickRate > maxTickrate)
+            {
+                currentTickRate = maxTickrate;
+                return;
+            }
+            
             SetTickRate(currentTickRate);
         }
 
         public void LowerTickrateButton()
         {
             currentTickRate--;
+            
+            if (currentTickRate < minTickrate)
+            {
+                currentTickRate = minTickrate;
+                return;
+            }
+            
             SetTickRate(currentTickRate);
         }
 
         public void PauseButton()
         {
             if (!paused)
+            {
                 SetTickRate(0);
-            else
-                SetTickRate(currentTickRate);
+                addTickRateButton.interactable = false;
+                lowerTickRateButton.interactable = false;
+                pauseButtonIcon.sprite = playSprite;
 
+
+            }
+            else
+            {
+                SetTickRate(currentTickRate);
+                addTickRateButton.interactable = true;
+                lowerTickRateButton.interactable = true;
+                pauseButtonIcon.sprite = pauseSprite;
+            }
             paused = !paused;
         }
     }
