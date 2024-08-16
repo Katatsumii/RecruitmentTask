@@ -1,6 +1,7 @@
 using Pathfinding;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System;
 
 namespace Agents
 {
@@ -8,11 +9,14 @@ namespace Agents
     {
         [SerializeField] AIPath aiPath;
 
+        string id;
+        
+
         IAstarAI ai;
         public void InitAgent()
         {
             //materialize 
-            //set guid
+            SetAgentGUID();
             NewPath();
         }
 
@@ -47,6 +51,11 @@ namespace Agents
             var grid = AstarPath.active.data.gridGraph;
             randomNode = grid.nodes[Random.Range(0, grid.nodes.Length)];
             return (Vector3)randomNode.position;
+        }
+
+        void SetAgentGUID()
+        {
+            id = Guid.NewGuid().ToString();
         }
 
         public void SetTickRateForAgent(int tickRate)

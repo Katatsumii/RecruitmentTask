@@ -59,7 +59,7 @@ namespace Agents
 
         void IAgentService.RequestAgentSpawn()
         {
-            Agent agent = GetAgentFromPool();
+            var agent = GetAgentFromPool();
             agent.gameObject.SetActive(true);
             agent.InitAgent();
             currentlyUsedAgents.Add(agent);
@@ -72,9 +72,11 @@ namespace Agents
             if (currentlyUsedAgents.Count == 0) return;
             
             int i = Random.Range(0, currentlyUsedAgents.Count - 1);
-            Agent agentToDisable = currentlyUsedAgents[i];
+            
+            var agentToDisable = currentlyUsedAgents[i];
             agentToDisable.gameObject.SetActive(false);
             currentlyUsedAgents.Remove(agentToDisable);
+            
             RefreshAgentsAmount();
         }
 
