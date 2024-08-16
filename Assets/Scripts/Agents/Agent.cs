@@ -10,10 +10,10 @@ namespace Agents
     {
         [SerializeField] AIPath aiPath;
         [SerializeField] AgentAnimations agentAnimations;
+        [SerializeField] AgentDissolve agentDissolve;
+        public AgentDissolve AgentDissolve => agentDissolve;
 
         string id;
-        
-
         IAstarAI ai;
 
         public event UnityAction<string> OnAgentPathCompleted = delegate {};
@@ -25,10 +25,8 @@ namespace Agents
         
         public void InitAgent()
         {
-            //materialize 
             SetAgentGuid();
             NewPath();
-
             aiPath.OnTargetReachedDestination += AgentReachedDestination;
         }
 

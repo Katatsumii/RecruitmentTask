@@ -20,7 +20,7 @@ namespace Agents
         
 
         ITickService iTickService;
-        int currentTickrate;
+        int currentTickrate = 1;
         
 
         void Awake()
@@ -65,11 +65,7 @@ namespace Agents
         {
             var agent = GetAgentFromPool();
             agent.gameObject.SetActive(true);
-            agent.InitAgent();
-            agent.OnAgentPathCompleted += AgentPathCompleted;
-            currentlyUsedAgents.Add(agent);
-            RefreshAgentsAmount();
-
+            agent.AgentDissolve.MaterializeAgent(() => AgentMaterialized(agent));
         }
 
         void IAgentService.RequestRandomAgentDisabled()
@@ -79,22 +75,37 @@ namespace Agents
             int i = Random.Range(0, currentlyUsedAgents.Count - 1);
             
             var agentToDisable = currentlyUsedAgents[i];
-            agentToDisable.gameObject.SetActive(false);
-            agentToDisable.OnAgentPathCompleted -= AgentPathCompleted;
+            agentToDisable.SetTickRateForAgent(0);
             currentlyUsedAgents.Remove(agentToDisable);
-            
-            RefreshAgentsAmount();
+            agentToDisable.AgentDissolve.DissolveAgent(() => AgentDissolved(agentToDisable));
         }
 
         void IAgentService.RequestAllAgentsDisabled()
         {
             for (int i = currentlyUsedAgents.Count - 1; i >= 0; i--)
             {
-                currentlyUsedAgents[i].gameObject.SetActive(false);
-                currentlyUsedAgents[i].OnAgentPathCompleted -= AgentPathCompleted;
-                currentlyUsedAgents.RemoveAt(i);
+                var agentToDisable = currentlyUsedAgents[i];
+                agentToDisable.SetTickRateForAgent(0);
+                currentlyUsedAgents.Remove(agentToDisable);
+                agentToDisable.AgentDissolve.DissolveAgent(() => AgentDissolved(agentToDisable));
             }
             
+            RefreshAgentsAmount();
+        }
+
+        void AgentDissolved(Agent agent)
+        {
+            agent.OnAgentPathCompleted -= AgentPathCompleted;
+            agent.gameObject.SetActive(false);
+            RefreshAgentsAmount();
+        }
+
+        void AgentMaterialized(Agent agent)
+        {
+            agent.InitAgent();
+            agent.SetTickRateForAgent(currentTickrate);
+            agent.OnAgentPathCompleted += AgentPathCompleted;
+            currentlyUsedAgents.Add(agent);
             RefreshAgentsAmount();
         }
 
